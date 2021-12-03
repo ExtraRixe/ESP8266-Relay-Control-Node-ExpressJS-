@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>NodeMCU Relay Control</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+	 crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+	 crossorigin="anonymous">
+
+	</script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+	 crossorigin="anonymous">
+
+	</script>
+	<style>
+		.switch {
+			position: relative;
+			display: inline-block;
+			width: 60px;
+			height: 34px;
+		}
+
+		.switch input {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+
+		.slider {
+			position: absolute;
+			cursor: pointer;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: #ccc;
+			-webkit-transition: .4s;
+			transition: .4s;
+		}
+
+		.slider:before {
+			position: absolute;
+			content: "";
+			height: 26px;
+			width: 26px;
+			left: 4px;
+			bottom: 4px;
+			background-color: white;
+			-webkit-transition: .4s;
+			transition: .4s;
+		}
+
+		input:checked+.slider {
+			background-color: #2196F3;
+		}
+
+		input:focus+.slider {
+			box-shadow: 0 0 1px #2196F3;
+		}
+
+		input:checked+.slider:before {
+			-webkit-transform: translateX(26px);
+			-ms-transform: translateX(26px);
+			transform: translateX(26px);
+		}
+
+		/* Rounded sliders */
+		.slider.round {
+			border-radius: 34px;
+		}
+
+		.slider.round:before {
+			border-radius: 50%;
+		}
+	</style>
+</head>
+
+<body>
+	<main class="d-flex justify-content-around p-5">
+		<div class="d-flex justify-content-center m-3">
+			<div class="card p-0" style="width: 18rem;">
+				<div class="card-header d-flex justify-content-between">
+					<h5 class="card-title m-0 align-center">Relay 1</h5>
+					<label class="switch">
+            <input type="checkbox" id="relay_1">
+            <span class="slider round"></span>
+            </label>
+         </div>
+         <div class="card-body">
+           <div id="timer_list_1" class="list-group"></div>
+           <div class="set-timer">
+            <form action="timer" method="get">
+              <label for="date_1">Start:</label>
+              <input type="time" class="form-control input" id="start_1" name="start" step="1" required>
+              <label for="end_1">End:</label>
+              <input type="time" class="form-control input" id="end_1" name="end" step="1" required>
+              <small id="t_minus_1"></small>
+              <input type="hidden" name="relay" value="relay_1">
+              <button type="submit" class="btn w-100 btn-primary mt-3">Add Time</button>
+            </form>
+           </div>
+         </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center m-3">
+      <div class="card p-0" style="width: 18rem;">
+         <div class="card-header d-flex justify-content-around">
+            <h5 class="card-title">Relay 2</h5>
+            <label class="switch">
+            <input type="checkbox" id="relay_2">
+            <span class="slider round"></span>
+            </label>
+         </div>
+         <div class="card-body">
+           <div id="timer_list_2" class="list-group">
+
+           </div>
+           <div class="set-timer">
+            <form action="timer" method="get">
+              <label for="date_2">Start:</label>
+              <input type="time" class="form-control input" id="start_2" name="start" step="1" required>
+              <label for="end_2">End:</label>
+              <input type="time" class="form-control input" id="end_2" name="end" step="1" required>
+              <small id="t_minus_2"></small>
+              <input type="hidden" name="relay" value="relay_2">
+              <button type="submit" class="btn w-100 btn-primary mt-3">Add Time</button>
+            </form>  
+           </div>
+         </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center m-3">
+      <div class="card p-0" style="width: 18rem;">
+         <div class="card-header d-flex justify-content-around">
+            <h5 class="card-title">Relay 3</h5>
+            <label class="switch">
+            <input type="checkbox" id="relay_3">
+            <span class="slider round"></span>
+            </label>
+         </div>
+         <div class="card-body">
+           <div id="timer_list_3" class="list-group">
+
+           </div>
+           <div class="set-timer">
+            <form action="timer" method="get">
+              <label for="date_3">Start:</label>
+              <input type="time" class="form-control input" id="start_3" name="start" step="1" required>
+              <label for="end_3">End:</label>
+              <input type="time" class="form-control input" id="end_3" name="end" step="1" required>
+              <small id="t_minus_3"></small>
+              <input type="hidden" name="relay" value="relay_3">
+              <button type="submit" class="btn w-100 btn-primary mt-3">Add Time</button>
+            </form>
+           </div>
+         </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center m-3">
+      <div class="card p-0" style="width: 18rem;">
+         <div class="card-header d-flex justify-content-around">
+            <h5 class="card-title">Relay 4</h5>
+            <label class="switch">
+            <input type="checkbox" id="relay_4">
+            <span class="slider round"></span>
+            </label>
+         </div>
+         <div class="card-body">
+           <div id="timer_list_4" class="list-group">
+           </div>
+           <div class="set-timer">
+            <form action="timer" method="get">
+              <label for="date_4">Start:</label>
+              <input type="time" class="form-control input" id="start_4" name="start" step="1" required>
+              <label for="end_4">End:</label>
+              <input type="time" class="form-control input" id="end_4" name="end" step="1" required>
+              <small id="t_minus_4"></small>
+              <input type="hidden" name="relay" value="relay_4">
+              <button type="submit" class="btn w-100 btn-primary mt-3">Add Time</button>
+            </form>
+           </div>
+         </div>
+    </div>
+</main>
+   </body>
+</html>
+<script>
+   $('input[type="checkbox"]').change(function(event){
+     let relay = event.target.id
+     let status = $("#"+relay).val() == 1 ? 0 : 1
+   
+     $.get("https://NodeMCU-Relay-Control.extrarixe.repl.co/switch?relay="+relay+"&status="+status,{ }, function(data){
+       if(data === 'yes') {
+           alert("get success");
+         }
+     });
+   
+   });
+</script>
+<script>
+   setInterval(function() {
+   $.getJSON("https://nodemcu-relay-control.extrarixe.repl.co/node", function(result){
+         $.each(result, function(i, field){
+          if(field['status'] == 1){
+             $("#"+i).prop("checked", true)
+           }else{
+             $("#"+i).prop("checked", false)
+           }
+           $("#"+i).attr("value", field['status'])
+
+          $("#timer_list_"+i.slice(-1)).html('')
+          if(field['start'].length > 0){
+            for(x = 0; x < field['start'].length; x++){
+              $("#timer_list_"+i.slice(-1)).append("<li class=\"list-group-item text-center\">"+field['start'][x]+" - "+field['end'][x]+"</li>")
+            }
+          }
+
+         })
+       })
+   }, 1000)
+</script>
