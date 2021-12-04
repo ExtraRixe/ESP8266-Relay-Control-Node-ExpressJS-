@@ -1,12 +1,12 @@
 const express = require("express");
 const app = express();
 
-var data = // 0 = off, 1 = on
+var data = // 0 = on, 1 = off
 {
-  "relay_1": { "status": 0, "start": [], "end": [] },
-  "relay_2": { "status": 0, "start": [], "end": [] },
-  "relay_3": { "status": 0, "start": [], "end": [] },
-  "relay_4": { "status": 0, "start": [], "end": [] }
+  "relay_1": { "status": 1, "start": [], "end": [] },
+  "relay_2": { "status": 1, "start": [], "end": [] },
+  "relay_3": { "status": 1, "start": [], "end": [] },
+  "relay_4": { "status": 1, "start": [], "end": [] }
 }
 
 
@@ -82,9 +82,9 @@ setInterval(function() {
       //console.log(`cur:${cur}\nstart: ${start}\nend:${end}`)
 
       if (cur >= start && cur <= end) {
-        data[x].status = 1
-      } else {
         data[x].status = 0
+      } else {
+        data[x].status = 1
       }
 
       if (cur > end) {
